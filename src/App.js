@@ -1,14 +1,16 @@
 import './App.css';
-import {SideBar, PlayGround} from './components'
+import { SideBar, PlayGround } from './components'
+import { useDefaultValues, Context } from './context';
 
 const App = () => {
-  
-  
+
   return (
-    <div className="container">
-      <SideBar/>
-      <PlayGround/>
-    </div>
+    <Context.Provider value={useDefaultValues()}>
+      <div className="container">
+        <SideBar />
+        <PlayGround />
+      </div>
+    </Context.Provider>
 
   );
 }

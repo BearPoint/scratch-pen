@@ -1,4 +1,4 @@
-export const htmlTemplte = ({html, css, javascript}) => {
+export const htmlTemplate = ({html='', css="", javascript=''}) => {
     return `
         <!DOCTYPE html>
         <html lang="en">

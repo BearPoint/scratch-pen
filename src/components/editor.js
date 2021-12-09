@@ -2,13 +2,18 @@ import Editor from "@monaco-editor/react";
 import { useEffect, useState } from 'react'
 import { useDebounce } from './../hooks'
 
-export const EditorComponent = ({ lang, changeHandler, defaultContent }) => {
+export const EditorComponent = ({ lang, defaultContent, onChangedContent }) => {
+
     const [content, setContent] = useState(defaultContent);
     const debouncedContent = useDebounce(content, 500);
+    useEffect(() => {
+        console.log('rerender')
+        setContent(defaultContent);
+    }, [defaultContent])
 
     useEffect(() => {
-        if (debouncedContent) 
-            changeHandler(lang, content);
+        if (debouncedContent)
+            onChangedContent(lang, debouncedContent)
     }, [debouncedContent]);
 
     return <Editor
