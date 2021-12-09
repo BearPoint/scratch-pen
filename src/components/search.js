@@ -1,11 +1,11 @@
-import { getNpmModules } from './../utils/npmEndpoint';
+import { getUrlValues, updateUrl,createImportStatement } from '../utils/utils';
 import { base64ToUtf8, utf8ToBase64 } from './../utils/encryption'
 import { useEffect, useState, useRef,useContext } from 'react';
+import { getNpmModules } from './../utils/npmEndpoint';
 import { useDebounce } from './../hooks'
-import './../styles/search.css';
 import { Context } from '../context';
+import './../styles/search.css';
 
-const CDN_URL = 'https://cdn.skypack.dev';
 export const Search = ({ isOpen }) => {
     const [, setContent] = useContext(Context);
     const [query, setQuery] = useState("");
@@ -14,25 +14,12 @@ export const Search = ({ isOpen }) => {
 
     const debouncedContent = useDebounce(query, 500);
     const clickModuleHandler = (name) => {
-        const url = `${CDN_URL}/${name}`;
-        const importStatement = `import ${capitalize(name)} from '${url}';\n`;
-        const { pathname } = window.location;
-        const [rawHtml, rawCss, rawJs] = pathname.slice(1).split('%7C');
-        const addLib = importStatement + base64ToUtf8(rawJs);
-        const hashedCode = `${rawHtml}|${rawCss}|${utf8ToBase64(addLib)}`;
-        window.history.replaceState(null, null, `/${hashedCode}`);
-        console.log('url',addLib)
+        const [rawHtml, rawCss, rawJs] = getUrlValues();
+        const addLib = createImportStatement(name) + base64ToUtf8(rawJs);
+        updateUrl({html: rawHtml, css: rawCss, js: utf8ToBase64(addLib)});
         setContent({javascript: addLib})
 
     }
-
-    const capitalize = (str) => {
-        return str
-            .split('-')
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join('')
-    }
-
 
     useEffect(() => {
         if (!debouncedContent) return;

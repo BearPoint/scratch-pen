@@ -1,16 +1,16 @@
 import { useEffect, useContext } from 'react';
-import { base64ToUtf8, utf8ToBase64} from '../utils/encryption';
+import { base64ToUtf8 } from '../utils/encryption';
 import { htmlTemplate } from './../utils/template';
 import { EditorComponent } from './editor';
-import { useDebounce } from '../hooks';
+import { getUrlValues, updateUrl } from '../utils/utils';
+
 import './../styles/playground.css';
 import { Context } from '../context';
 export const PlayGround = (props) => {
     const [context, setContent] = useContext(Context);
-    console.log(context);
+    
     useEffect(() => {
-        const { pathname } = window.location;
-        const [rawHtml, rawCss, rawJs] = pathname.slice(1).split('%7C');
+        const [rawHtml, rawCss, rawJs] = getUrlValues();
         setContent({
             html: rawHtml?.length ? base64ToUtf8(rawHtml) : '',
             css: rawCss?.length ? base64ToUtf8(rawCss) : '',
@@ -19,16 +19,11 @@ export const PlayGround = (props) => {
     }, []);
 
     useEffect(() => {
-        updateUrl()
-    },[context])
-    
+        updateUrl(context)
+    }, [context])
+
     const onChangedContent = (lang, content) => setContent({ [lang]: content })
-    const updateUrl= () => {
-        console.log(context)
-        const { pathname } = window.location;
-        const hashedCode = `${utf8ToBase64(context.html)}|${utf8ToBase64(context.css)}|${utf8ToBase64(context.javascript)}`;
-        window.history.replaceState(null, null, `/${hashedCode}`);
-    }
+
     return (
         <div className='playground'>
             <EditorComponent lang={'html'} onChangedContent={onChangedContent} defaultContent={context.html} />

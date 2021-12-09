@@ -9,9 +9,6 @@ const defaultValues = {
 
 export const useDefaultValues = () => {
     const [state, setState] = useState(defaultValues);
-    const setValues = (newObject) => {
-        setState((val) => ({ ...val, ...newObject }))
-    }
     const setContent = (content) => {
         setState(val => ({
             ...val,
