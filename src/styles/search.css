@@ -1,0 +1,33 @@
+
+.search {
+    padding: 30px;
+    color: #fff;
+}
+.search-input {
+    margin: 0 10px;
+}
+
+.results {
+    margin-top: 24px;
+}
+
+.item-name {
+    font-size:14px;
+}
+.item-description {
+    font-size: 12px;
+}
+.extension { 
+    position: absolute;
+    background-color: #252057;
+    height: 100%;
+    top: 0;
+    left: 44px;
+    z-index: 1;
+    max-width: 250px;
+    overflow-y: auto;
+    display: none;
+}
+.open {
+    display: block
+}
